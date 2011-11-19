@@ -3,7 +3,6 @@ package com.carrotgarden.hadoop;
 // import org.apache.commons.logging.Log;
 // import org.apache.commons.logging.LogFactory;
 
-import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
@@ -63,24 +62,21 @@ public class HadoopJob {
 	// desc="Generated Code">//GEN-BEGIN:initJob
 	public static void initJob(final Job job) {
 
-		final Configuration conf = job.getConfiguration();
-
+		org.apache.hadoop.conf.Configuration conf = job.getConfiguration();
 		// Generating code using Karmasphere Protocol for Hadoop 0.20
 		// CG_GLOBAL
 
 		// CG_INPUT_HIDDEN
-		job.getConfiguration().set("mapreduce.inputformat.class",
-				"org.apache.hadoop.mapreduce.lib.input.TextInputFormat");
-		job.getConfiguration().set("mapred.input.format.class",
-				"org.apache.hadoop.mapreduce.lib.input.TextInputFormat");
+		job.setInputFormatClass(org.apache.hadoop.mapreduce.lib.input.TextInputFormat.class);
 
 		// CG_MAPPER_HIDDEN
-		job.getConfiguration().set("mapreduce.map.class",
-				"org.apache.hadoop.mapreduce.lib.map.TokenCounterMapper");
-		job.getConfiguration().set("mapred.mapper.class",
-				"org.apache.hadoop.mapreduce.lib.map.TokenCounterMapper");
+		job.setMapperClass(org.apache.hadoop.mapreduce.lib.map.TokenCounterMapper.class);
+		job.getConfiguration().set("mapred.mapper.new-api", "true");
 
 		// CG_MAPPER
+		job.setMapOutputKeyClass(org.apache.hadoop.io.Text.class);
+		job.setMapOutputValueClass(org.apache.hadoop.io.IntWritable.class);
+		job.getConfiguration().set("mapred.max.map.failures.percent", "0.0");
 
 		// CG_PARTITIONER_HIDDEN
 		job.setPartitionerClass(org.apache.hadoop.mapreduce.lib.partition.HashPartitioner.class);
@@ -94,19 +90,15 @@ public class HadoopJob {
 		// CG_COMBINER_HIDDEN
 
 		// CG_REDUCER_HIDDEN
-		job.getConfiguration().set("mapreduce.reduce.class",
-				"org.apache.hadoop.mapreduce.lib.reduce.IntSumReducer");
-		job.getConfiguration().set("mapred.reducer.class",
-				"org.apache.hadoop.mapreduce.lib.reduce.IntSumReducer");
+		job.setReducerClass(org.apache.hadoop.mapreduce.lib.reduce.IntSumReducer.class);
+		job.getConfiguration().set("mapred.reducer.new-api", "true");
 
 		// CG_REDUCER
 		job.getConfiguration().set("mapred.reduce.tasks", "1");
+		job.setOutputValueClass(org.apache.hadoop.io.IntWritable.class);
 
 		// CG_OUTPUT_HIDDEN
-		job.getConfiguration().set("mapreduce.outputformat.class",
-				"org.apache.hadoop.mapreduce.lib.output.TextOutputFormat");
-		job.getConfiguration().set("mapred.output.format.class",
-				"org.apache.hadoop.mapreduce.lib.output.TextOutputFormat");
+		job.setOutputFormatClass(org.apache.hadoop.mapreduce.lib.output.TextOutputFormat.class);
 
 		// CG_OUTPUT
 
